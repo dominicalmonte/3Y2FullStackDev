@@ -2,6 +2,26 @@
 
 ![Logo](fullstack_dev/frontend/src/Logo.png)
 
+## Controls:
+- **Start(Frontend)**: ``npm run dev`` unfortunately we weren't able to resolve build errors for deployment so npm run build would be used
+- **End**: ``CTRL + C``
+
+## Users:
+
+- **Professor**
+- username: soak@addu.edu.ph
+- password: pokemon
+- username: ssnape@addu.edu.ph
+- password: lilypotter
+
+- **Admin**
+- username: apwbdumbledore@addu.edu.ph
+- password: gellertgrindelwald
+
+- **Student**
+- username: pjackson@addu.edu.ph
+- password: annabethchase
+
 ## Description
 - Through RateMyProf, students would be able to rate their teachers based off their experiences in class. Their class schedules could also be viewed to provide better clarity for the students
 - Faculty would be able to view their score/ratings. Administrators/Cluster Department Chairs would also get to view the statistical ratings of their faculty to provide better insight on how to further the academic experience of students and teachers alike.
@@ -55,11 +75,6 @@
 - **NodeJS** --> https://nodejs.org/en/download/current
 - **Python** --> https://www.python.org/downloads/
 - **PostgreSQL** --> https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
-
-## Controls:
-- **Start(Backend)**: ``python .\manage.py runserver``
-- **Start(Frontend)**: ``npm run dev``
-- **End**: ``CTRL + C``
 
 ## Notes:
 - When installing django, it might me useful to use the ``--user`` keyword: pip install --user djangorestframework
