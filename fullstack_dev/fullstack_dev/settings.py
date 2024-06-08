@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import dj_database_url
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,12 +22,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m1dt-h(j)_dv!p&+s&xcn!0^r$gv$%h&2xj81&8&u$tgvg4z4w'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "FALSE").lower == "true"
 
-ALLOWED_HOSTS = []
+# Ensure that the environment variable exists and is not None
+if "ALLOWED_HOSTS" in os.environ and os.environ["ALLOWED_HOSTS"]:
+    # Split the environment variable value by whitespace
+    ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split()
+else:
+    # Set a default value for ALLOWED_HOSTS if the environment variable is not set or is empty
+    ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -47,12 +55,17 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Ensure Whitenoise middleware is included
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Ensure Whitenoise storage is used
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -68,6 +81,8 @@ JWT_AUTH = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://topprofessor.onrender.com"
+    
 ]
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
@@ -108,18 +123,23 @@ WSGI_APPLICATION = 'fullstack_dev.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# Use the DATABASES configuration if DATABASE_URL is not provided
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',  # Or the hostname where PostgreSQL is running
-        'PORT': '5432',       # Default PostgreSQL port
-    }
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'topprofessor',
+            'USER': 'topprofessor_user',
+            'PASSWORD': '5r8Icb4VzeMmUBXW1akcCQiV9mLIIrYb',
+            'HOST': 'dpg-cpaikosf7o1s73ahcg40-a.singapore-postgres.render.com',  # Or the hostname where PostgreSQL is running
+            'PORT': '5432',       # Default PostgreSQL port
+        }
 }
 
-DATABASES["default"] = dj_database_url.parse("postgres://topprofessor_user:5r8Icb4VzeMmUBXW1akcCQiV9mLIIrYb@dpg-cpaikosf7o1s73ahcg40-a.singapore-postgres.render.com/topprofessor")
+database_url = os.environ.get("DATABASE_URL")
+database_url = os.environ.get("DATABASE_URL")
+if database_url:
+    DATABASES["default"] = dj_database_url.parse(database_url)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -155,11 +175,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-

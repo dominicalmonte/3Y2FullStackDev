@@ -1,0 +1,11 @@
+/* src/styles.css */
+
+/* Your custom CSS styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  /* Additional custom styles */
+  h1 {
+    color: #FFD460; /* Mustard color */
+  }
